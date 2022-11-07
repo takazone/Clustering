@@ -1,0 +1,44 @@
+import matplotlib.pyplot as plt 
+import numpy as np
+import pandas as pd
+from sklearn.cluster import KMeans
+from matplotlib import style
+
+plt.style.use ("ggplot")
+
+##############DATABASE##########
+
+df = pd.read_excel(r"C:\Users\takazone\OneDrive\Área de Trabalho\PLANETAS 4 - Copia (2).xlsx")
+z = np.array (df['DENSITY'])
+y = np.array (df['ORBITALPERIOD'])
+x = np.stack ([z, y])
+
+######KMEANS##################
+
+km = KMeans(n_clusters= 2) #choose the number of clusters. For this you can plot a scatter plot, elbow method or silhouette score. All three are different methods that will point you for the number of clusters. Scatter plot is not very trustfull depending of your data
+yp = km.fit_predict (df[['DENSITY', 'ORBITALPERIOD']])
+centroids = km.cluster_centers_
+centroids_x = centroids[:,0]
+centroids_y = centroids[:,1]
+
+df['cluster'] = yp
+
+df0 = df[df.cluster==0]
+df1 = df[df.cluster==1]
+#df2 = df[df.cluster==2]
+#df3 = df[df.cluster==3]
+#df4 = df[df.cluster==4]
+plt.scatter (df0.DENSITY,df0['ORBITALPERIOD'], color= 'mediumslateblue', marker ="o", s=40)
+plt.scatter (df1.DENSITY,df1['ORBITALPERIOD'], color='deeppink', marker ="o", s=40)
+#plt.scatter (df2.DENSITY,df2['GRAVITY'], color='darkorchid', marker ="o", s=40)
+#plt.scatter (df3.DENSITY,df3['GRAVITY'], color='green', marker ="o", s=40)
+#plt.scatter (df4.DENSITY,df4['GRAVITY'], color='red', marker ="o", s=40)
+
+plt.xlabel ('DENSITY (g/cm³)')
+plt.ylabel ('ORBITALPERIOD (m/s²)')
+plt.title  ('Super Earth Kmeans')
+plt.legend(['Cluster 1', 'Cluster 2', 'Cluster 3'], loc="lower right" )
+plt.scatter(centroids_x,centroids_y,marker = "o", s=90,linewidths = 1, zorder = 10, c=['black', 'black'])
+
+
+plt.show()
