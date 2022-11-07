@@ -1,0 +1,12 @@
+import pandas as pd
+from matplotlib import style
+import matplotlib.pyplot as plt
+
+plt.style.use ("bmh") #style just change th4e style of the graphic plot. Needs to be put at the beggining otherwise will not have any effect
+
+df = pd.read_excel(r"C:\Users\takazone\OneDrive\Área de Trabalho\PLANETAS 4 - Copia (2).xlsx") #the path for your excel dataframe
+
+plt.boxplot (af['DENSITY'], sym ='x', vert= False) #name of the column you wish to analyze
+plt.title ('Dataset Distribution Test') #graphic title
+plt.ylabel ('Density (g/cm³)') #title of the y label
+plt.show()
