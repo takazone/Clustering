@@ -1,0 +1,38 @@
+import pandas as pd
+import numpy as np
+from sklearn.cluster import DBSCAN
+import matplotlib.pyplot as plt
+from matplotlib import style
+
+plt.style.use ("ggplot")
+
+####################DATA FRAME####################
+
+data = pd.read_excel(r"C:\Users\takazone\OneDrive\Área de Trabalho\PLANETAS_ATUALIZADO - 2.5.xlsx")
+x = np.array (data['DENSITY'])
+y = np.array (data['GRAVITY'])
+df = np.array(list(zip(x, y)))
+
+##############DBSCAN############################
+
+dbscan = DBSCAN(eps=2, min_samples=4) #eps are the number of clusters and minsamples are the min number of points to form a cluster. Generally for 2D plots its used 4 or 2*(number of dimensions).
+labels = dbscan.fit_predict (df)
+np.unique (labels)
+
+plt.scatter (df[labels == -1, 0], df[labels == -1, 1], s=20, color= 'black')
+
+plt.scatter (df[labels == 0, 0], df[labels == 0, 1], s = 40, color= 'magenta')
+plt.scatter (df[labels == 1, 0], df[labels == 1, 1], s = 40, color= 'slateblue')
+#plt.scatter (df[labels == 2, 0], df[labels == 2, 1], s = 40, color= 'purple')
+#plt.scatter (df[labels == 3, 0], df[labels == 3, 1], s = 40, color= 'green')
+#plt.scatter (df[labels == 4, 0], df[labels == 4, 1], s = 40, color= 'blue')
+
+#################GRAPHIC PLOT############################
+
+plt.xlabel ('Density (g/cm³)') #x label title
+plt.ylabel ('Gravity (m/s²)') #y label title
+plt.title ("Super Earth Dbscan") #graphic title 
+plt.legend(['Outlier', 'Cluster 1', 'Cluster 2'], loc="lower right" ) #legend
+plt.show()
+
+#plt.legend(['Outlier', 'Cluster 1', 'Cluster 2','Cluster 3'], loc="lower right" )
