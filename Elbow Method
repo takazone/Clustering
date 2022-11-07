@@ -1,0 +1,48 @@
+from sklearn.cluster import KMeans
+import pandas as pd
+from sklearn import metrics
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import style
+
+plt.style.use ("ggplot") #style must be put in the beggining of the script otherwise it will not work. Consult style names and replace for another one you choose
+
+############DATA FRAME#########
+
+df = pd.read_excel(r"C:\Users\takazone\OneDrive\Área de Trabalho\PLANETAS 4 - Copia (2).xlsx") #df means data frame; replace with the path to your excel file
+
+x = np.array (df['GRAVITY']) #insert the name of the excel column
+y = np.array (df['DENSITY']) #insert the name of the other excel column 
+
+X = np.array(list(zip(x, y))).reshape(len(x), 2) #array of x and y; recommended not to change the X name otherwise you'll need to replace the new one in the main code
+
+###########ELBOW METHOD BASED ON INERTIA######
+
+distortions = []
+inertias = []
+mapping1 = {}
+mapping2 = {}
+K = range(1, 10)
+  
+for k in K:
+    # Building and fitting the model
+    kmeanModel = KMeans(n_clusters=k).fit(X)
+    kmeanModel.fit(X)
+   
+    distortions.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_,
+                                        'euclidean'), axis=1)) / X.shape[0])
+    inertias.append(kmeanModel.inertia_)
+  
+    mapping1[k] = sum(np.min(cdist(X, kmeanModel.cluster_centers_,
+                                   'euclidean'), axis=1)) / X.shape[0]
+    mapping2[k] = kmeanModel.inertia_
+    
+ 
+ ###########GRAPHIC PLOT###############
+    
+plt.plot(K, inertias, 'bx-', color= "magenta") #color can be replaced by any other you wish
+plt.xlabel('Values of K') #name your x label
+plt.ylabel('Inertia') #name your y label
+plt.title('Super Earth Elbow Method for K-means') #graphic title
+
+plt.show()
